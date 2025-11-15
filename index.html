@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORD VOID</title>
+<style>
+  /* Basic Reset */
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
+
+  body {
+    background: radial-gradient(circle at center, #0b0b0b, #1a001a);
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #800080;
+    margin-bottom: 2rem;
+  }
+
+  textarea {
+    width: 80%;
+    height: 200px;
+    background: #1a001a;
+    color: #fff;
+    border: 1px solid #ff00ff;
+    padding: 1rem;
+    resize: none;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 0 10px #ff00ff;
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    background: #ff00ff;
+    color: #0b0b0b;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff inset;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #800080;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff inset;
+  }
+
+  .output {
+    margin-top: 2rem;
+    width: 80%;
+    min-height: 150px;
+    border: 1px solid #ff00ff;
+    padding: 1rem;
+    background: #1a001a;
+    box-shadow: 0 0 10px #ff00ff;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<h1>VORD VOID</h1>
+
+<textarea id="inputHTML" placeholder="Paste your HTML code here..."></textarea>
+<button onclick="processHTML()">Process</button>
+
+<div class="output" id="outputHTML">AI output will appear here...</div>
+
+<script>
+function processHTML() {
+    const input = document.getElementById('inputHTML').value;
+    // For now, just echo the input — later you can integrate AI
+    const output = "Processed HTML:\n\n" + input;
+    document.getElementById('outputHTML').textContent = output;
+}
+</script>
+
+</body>
+</html>
