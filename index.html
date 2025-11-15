@@ -5,18 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VORD VOID</title>
 <style>
-  /* Basic Reset */
+  /* Reset & body */
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
-
   body {
     background: radial-gradient(circle at center, #0b0b0b, #1a001a);
     color: #fff;
-    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
+    min-height: 100vh;
+    padding: 2rem;
   }
 
   h1 {
@@ -24,20 +22,23 @@
     color: #ff00ff;
     text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #800080;
     margin-bottom: 2rem;
+    text-align: center;
   }
 
   textarea {
     width: 80%;
+    max-width: 900px;
     height: 200px;
     background: #1a001a;
     color: #fff;
     border: 1px solid #ff00ff;
     padding: 1rem;
-    resize: none;
+    resize: vertical;
     font-family: 'Courier New', monospace;
     font-size: 1rem;
     outline: none;
     box-shadow: 0 0 10px #ff00ff;
+    border-radius: 5px;
   }
 
   button {
@@ -51,6 +52,7 @@
     font-size: 1rem;
     box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff inset;
     transition: 0.3s;
+    border-radius: 5px;
   }
 
   button:hover {
@@ -61,12 +63,20 @@
   .output {
     margin-top: 2rem;
     width: 80%;
+    max-width: 900px;
     min-height: 150px;
     border: 1px solid #ff00ff;
     padding: 1rem;
     background: #1a001a;
     box-shadow: 0 0 10px #ff00ff;
     white-space: pre-wrap;
+    border-radius: 5px;
+  }
+
+  .hint {
+    margin-top: 1rem;
+    color: #ff99ff;
+    font-size: 0.9rem;
   }
 </style>
 </head>
@@ -75,16 +85,71 @@
 <h1>VORD VOID</h1>
 
 <textarea id="inputHTML" placeholder="Paste your HTML code here..."></textarea>
-<button onclick="processHTML()">Process</button>
+<button onclick="processHTML()">Process HTML</button>
 
 <div class="output" id="outputHTML">AI output will appear here...</div>
+<div class="hint">Tip: VORD VOID will try to format, highlight errors, and suggest fixes in your HTML.</div>
 
 <script>
+/* Core VORD VOID JS */
 function processHTML() {
     const input = document.getElementById('inputHTML').value;
-    // For now, just echo the input — later you can integrate AI
-    const output = "Processed HTML:\n\n" + input;
+    if (!input.trim()) {
+        document.getElementById('outputHTML').textContent = "⚠️ Please enter some HTML code first!";
+        return;
+    }
+
+    let output = "";
+
+    // 1️⃣ Basic Formatting
+    output += "🛠️ Formatted HTML:\n\n";
+    output += formatHTML(input);
+
+    // 2️⃣ Simple Error Detection
+    output += "\n\n⚡ Quick Error Check:\n";
+    output += checkHTMLErrors(input);
+
     document.getElementById('outputHTML').textContent = output;
+}
+
+/* Simple HTML formatter */
+function formatHTML(html) {
+    let formatted = "";
+    const lines = html.split(/>\s*</); // split by tags
+    for (let line of lines) {
+        if (!line) continue;
+        line = line.replace(/^\s+|\s+$/g, "");
+        formatted += "<" + line.trim() + ">\n";
+    }
+    return formatted;
+}
+
+/* Very basic HTML error checker */
+function checkHTMLErrors(html) {
+    let errors = "";
+    const tagStack = [];
+    const tagRegex = /<\s*\/?\s*([a-zA-Z0-9\-]+)[^>]*>/g;
+    let match;
+    while ((match = tagRegex.exec(html)) !== null) {
+        const tag = match[1];
+        const isClosing = html[match.index + 1] === '/';
+        if (!isClosing) {
+            tagStack.push(tag);
+        } else {
+            if (tagStack.length === 0 || tagStack[tagStack.length - 1] !== tag) {
+                errors += `❌ Mismatched closing tag: </${tag}>\n`;
+            } else {
+                tagStack.pop();
+            }
+        }
+    }
+    if (tagStack.length > 0) {
+        for (let t of tagStack) {
+            errors += `❌ Missing closing tag for: <${t}>\n`;
+        }
+    }
+    if (!errors) return "✅ No obvious tag errors detected.";
+    return errors;
 }
 </script>
 
